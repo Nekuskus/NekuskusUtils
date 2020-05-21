@@ -2,15 +2,66 @@
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace NekuskusUtils
 {
-    public struct QInt : IComparable, IFormattable, IConvertible, IComparable<QInt>, IEquatable<QInt>, IQueryable<QInt>
+    public struct QInt : IComparable, IConvertible, IComparable<QInt>, IEquatable<QInt>, IQueryable<QInt>
     {
+        public QInt(long value)
+        {
+            m_value = value;
+        }
         public const long MaxValue = Int64.MaxValue;
         public const long MinValue = Int64.MinValue;
         internal long m_value;
-        //TODO: When IComparable and IConvertible are done, add {this >= (QInt)100 ? (short)((m_value%100)/10) : throw costam} in these properties
+        //
+        // Operators
+        //
+        public static QInt operator +(QInt i, QInt i2) => new QInt(i.m_value + i2.m_value);
+        public static QInt operator -(QInt i, QInt i2) => new QInt(i.m_value - i2.m_value);
+        public static QInt operator *(QInt i, QInt i2) => new QInt(i.m_value * i2.m_value);
+        public static QInt operator /(QInt i, QInt i2) => new QInt(i.m_value / i2.m_value);
+        public static QInt operator %(QInt i, QInt i2) => new QInt(i.m_value % i2.m_value);
+        public static QInt operator +(QInt i, long i2) => new QInt(i.m_value + i2);
+        public static QInt operator -(QInt i, long i2) => new QInt(i.m_value - i2);
+        public static QInt operator *(QInt i, long i2) => new QInt(i.m_value * i2);
+        public static QInt operator /(QInt i, long i2) => new QInt(i.m_value / i2);
+        public static QInt operator %(QInt i, long i2) => new QInt(i.m_value % i2);
+        public static QInt operator +(QInt i, Object i2)
+        {
+            if(!(i2 is long)) throw new InvalidCastException($"Invalid cast from {i2.GetType()} to long");
+            return new QInt(i.m_value + (long)i2);
+        }
+        public static QInt operator -(QInt i, Object i2)
+        {
+            if(!(i2 is long)) throw new InvalidCastException($"Invalid cast from {i2.GetType()} to long");
+            return new QInt(i.m_value - (long)i2);
+        }
+        public static QInt operator *(QInt i, Object i2)
+        {
+            if(!(i2 is long)) throw new InvalidCastException($"Invalid cast from {i2.GetType()} to long");
+            return new QInt(i.m_value * (long)i2);
+        }
+        public static QInt operator /(QInt i, Object i2)
+        {
+            if(!(i2 is long)) throw new InvalidCastException($"Invalid cast from {i2.GetType()} to long");
+            return new QInt(i.m_value / (long)i2);
+        }
+        public static QInt operator %(QInt i, Object i2)
+        {
+            if(!(i2 is long)) throw new InvalidCastException($"Invalid cast from {i2.GetType()} to long");
+            return new QInt(i.m_value % (long)i2);
+        }
+        public static bool operator == (QInt i, QInt i2)
+        {
+            return i.Equals(i2);
+        }
+        public static bool operator != (QInt i, QInt i2)
+        {
+            return !i.Equals(i2);
+        }
+        // TODO: When IComparable and IConvertible are done, add {this >= (QInt)100 ? (short)((m_value%100)/10) : throw costam} in these properties
         public short Units
         {
             get => (short)(m_value%10);
@@ -76,6 +127,10 @@ namespace NekuskusUtils
         {
             return m_value == obj;
         }
+        bool IEquatable<QInt>.Equals(QInt other)
+        {
+            return Equals(other);
+        }
         public override int GetHashCode()
         {
             return (unchecked((int)((long)m_value)) ^ (int)(m_value >> 32));
@@ -119,9 +174,16 @@ namespace NekuskusUtils
         {
             return Int64.TryParse(s, out result);
         }
+        //
+        // IConvertible
+        //
         public TypeCode GetTypeCode()
         {
             return TypeCode.Int64;
+        }
+        string IConvertible.ToString(IFormatProvider provider)
+        {
+            return ToString();
         }
         bool IConvertible.ToBoolean(IFormatProvider provider)
         {
@@ -179,9 +241,12 @@ namespace NekuskusUtils
         {
             throw new InvalidCastException("Invalid cast from Int64 to DateTime");
         }
-        /*Object IConvertible.ToType(IFormatProvider provider)
+        /// <summary>
+        /// Conversion is not actually supported, it just returns the type of Int64
+        /// </summary>
+        Object IConvertible.ToType(Type conversionType, IFormatProvider provider)
         {
-            throw new NotImplementedException("Could not implement due to Microsoft limitations");
-        }*/
+            return GetType();
+        }
     }
 }
