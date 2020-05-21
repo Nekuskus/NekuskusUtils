@@ -119,5 +119,69 @@ namespace NekuskusUtils
         {
             return Int64.TryParse(s, out result);
         }
+        public TypeCode GetTypeCode()
+        {
+            return TypeCode.Int64;
+        }
+        bool IConvertible.ToBoolean(IFormatProvider provider)
+        {
+            return Convert.ToBoolean(m_value);
+        }
+        char IConvertible.ToChar(IFormatProvider provider)
+        {
+            return Convert.ToChar(m_value);
+        }
+        sbyte IConvertible.ToSByte(IFormatProvider provider)
+        {
+            return Convert.ToSByte(m_value);
+        }
+        byte IConvertible.ToByte(IFormatProvider provider)
+        {
+            return Convert.ToByte(m_value);
+        }
+        short IConvertible.ToInt16(IFormatProvider provider)
+        {
+            return Convert.ToInt16(m_value);
+        }
+        ushort IConvertible.ToUInt16(IFormatProvider provider)
+        {
+            return Convert.ToUInt16(m_value);
+        }
+        int IConvertible.ToInt32(IFormatProvider provider)
+        {
+            return Convert.ToInt32(m_value);
+        }
+        uint IConvertible.ToUInt32(IFormatProvider provider)
+        {
+            return Convert.ToUInt32(m_value);
+        }
+        long IConvertible.ToInt64(IFormatProvider provider)
+        {
+            return m_value;
+        }
+        ulong IConvertible.ToUInt64(IFormatProvider provider)
+        {
+            return Convert.ToUInt64(m_value);
+        }
+        float IConvertible.ToSingle(IFormatProvider provider)
+        {
+            return Convert.ToSingle(m_value);
+        }
+        double IConvertible.ToDouble(IFormatProvider provider)
+        {
+            return Convert.ToDouble(m_value);
+        }
+        Decimal IConvertible.ToDecimal(IFormatProvider provider)
+        {
+            return Convert.ToDecimal(m_value);
+        }
+        DateTime IConvertible.ToDateTime(IFormatProvider provider)
+        {
+            throw new InvalidCastException("Invalid cast from Int64 to DateTime");
+        }
+        /*Object IConvertible.ToType(IFormatProvider provider)
+        {
+            throw new NotImplementedException("Could not implement due to Microsoft limitations");
+        }*/
     }
 }
