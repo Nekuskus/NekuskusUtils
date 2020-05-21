@@ -112,6 +112,10 @@ namespace NekuskusUtils
             }
             throw new ArgumentException("Argument must be Int64 (long)");
         }
+        int IComparable<QInt>.CompareTo(QInt other)
+        {
+            return CompareTo(other);
+        }
         public int CompareTo(long value)
         {
             if(m_value < value) return -1;
@@ -120,7 +124,7 @@ namespace NekuskusUtils
         }
         public override bool Equals(Object obj)
         {
-            if(!(obj is Int64)) return false;
+            if(!(obj is long)) return false;
             return m_value == ((Int64)obj);
         }
         public bool Equals(Int64 obj)
