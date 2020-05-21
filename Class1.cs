@@ -100,5 +100,24 @@ namespace NekuskusUtils
         {
             return Int64.Parse(s, style, provider);
         }
+        /// <summary>
+        /// Returns true/false without assigning anything
+        /// </summary>
+        public static bool TryParse(String s)
+        {
+            try
+            {
+                Parse(s);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public static bool TryParse(String s, out long result)
+        {
+            return Int64.TryParse(s, out result);
+        }
     }
 }
